@@ -3,16 +3,12 @@ package main
 import (
 	infrastructure "gcp_go_cloud_run/app/infrastructure/mysql"
 	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	port := "8080"
 
 	infrastructure.InitDB()
 
