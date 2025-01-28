@@ -29,7 +29,7 @@ func InitDB() {
 		GetEnv("DB_USER", "root"),
 		GetEnv("DB_PASSWORD", ""),
 		GetEnv("DB_HOST", "localhost"),
-		GetEnv("DB_PORT", "4000"),
+		GetEnv("DB_PORT", "5000"),
 		GetEnv("DB_NAME", "your_db_name"),
 	)
 
