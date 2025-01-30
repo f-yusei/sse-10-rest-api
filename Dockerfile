@@ -12,8 +12,6 @@ FROM scratch
 
 WORKDIR /app
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-
 COPY --from=builder /server /server
 
 EXPOSE 8080
