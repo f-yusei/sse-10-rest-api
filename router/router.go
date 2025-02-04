@@ -28,5 +28,10 @@ func SetupRouter(storeController *controller.StoreController, bellController *co
 		c.JSON(http.StatusOK, gin.H{"status": "OK"})
 	})
 
+	// hello route
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "Hello, Bell World!"})
+	})
+
 	return router
 }
