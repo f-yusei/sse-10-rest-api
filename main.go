@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"gcp_go_cloud_run/app/controller"
 	infrastructure "gcp_go_cloud_run/app/infrastructure/mysql"
+	mysql "gcp_go_cloud_run/app/infrastructure/mysql/repository"
+	"gcp_go_cloud_run/app/router"
+	"gcp_go_cloud_run/app/usecase"
 	"log"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -23,7 +25,20 @@ func main() {
 
 	infrastructure.InitDB()
 
-	r := gin.Default()
+	// リポジトリの初期化
+	storeRepo := mysql.NewStoreRepository(infrastructure.DB)
+	bellRepo := mysql.NewBellRepository(infrastructure.DB)
+
+	// サービスの初期化
+	storeService := usecase.NewStoreService(storeRepo)
+	bellService := usecase.NewBellService(bellRepo)
+
+	// コントローラの初期化
+	storeController := controller.NewStoreController(storeService)
+	bellController := controller.NewBellController(bellService)
+
+	// ルーターの設定
+	r := router.SetupRouter(storeController, bellController)
 
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
