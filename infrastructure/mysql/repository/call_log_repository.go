@@ -31,8 +31,13 @@ func (r *CallLogRepository) FindByID(id int) (*entity.CallLog, error) {
 	return &callLog, nil
 }
 
-func (r *CallLogRepository) Create(callLog *entity.CallLog) error {
-	if err := r.DB.Create(callLog).Error; err != nil {
+func (r *CallLogRepository) Create(bell_id int, store_id int) error {
+	callLog := entity.CallLog{
+		BellID:  bell_id,
+		StoreID: store_id,
+		Status:  "active", //デフォルトでactiveにする
+	}
+	if err := r.DB.Create(&callLog).Error; err != nil {
 		return err
 	}
 	return nil
@@ -42,5 +47,21 @@ func (r *CallLogRepository) Update(callLog *entity.CallLog) error {
 	if err := r.DB.Save(callLog).Error; err != nil {
 		return err
 	}
+	return nil
+}
+
+func (r *CallLogRepository) UpdateStatus(bell_id int, status string) error {
+	//最新の呼び出しログを取得
+	var callLog entity.CallLog
+	if err := r.DB.Where("bell_id = ?", bell_id).Order("id desc").First(&callLog).Error; err != nil {
+		return err
+	}
+
+	//ステータスを更新
+	callLog.Status = status
+	if err := r.DB.Save(&callLog).Error; err != nil {
+		return err
+	}
+
 	return nil
 }

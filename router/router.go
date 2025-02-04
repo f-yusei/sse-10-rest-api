@@ -19,11 +19,8 @@ func SetupRouter(storeController *controller.StoreController, bellController *co
 
 		// Bell routes
 		api.GET("/bells/active", bellController.GetActiveBells)
-		//TODO: Uncomment the following routes after implementing the corresponding methods in the BellController
-		/*
-			api.POST("/bells/:bellId/call", bellController.CallBell)         // Call a bell
-			api.POST("/bells/:bellId/complete", bellController.CompleteCall) // Complete a call
-		*/
+		api.POST("/bells/:bellId/call", bellController.CallBell)         // Call a bell
+		api.POST("/bells/:bellId/complete", bellController.CompleteCall) // Complete a call
 	}
 
 	// Health check route

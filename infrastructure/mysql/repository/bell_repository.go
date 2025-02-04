@@ -52,11 +52,25 @@ func (r *BellRepository) Delete(id int) error {
 	return nil
 }
 
-// TODO gptに作成してもらったため内容を確認する
 func (r *BellRepository) GetActiveBells() ([]*entity.Bell, error) {
 	var bells []*entity.Bell
-	if err := r.DB.Where("active = ?", true).Find(&bells).Error; err != nil {
+	if err := r.DB.Where("status = ?", "calling").Find(&bells).Error; err != nil {
 		return nil, err
 	}
 	return bells, nil
+}
+
+func (r *BellRepository) UpdateStatus(id int, status string) error {
+	if err := r.DB.Model(&entity.Bell{}).Where("id = ?", id).Update("status", status).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *BellRepository) GetStoreIDByBellID(bell_id int) (int, error) {
+	var bell entity.Bell
+	if err := r.DB.First(&bell, bell_id).Error; err != nil {
+		return 0, err
+	}
+	return bell.StoreID, nil
 }

@@ -4,6 +4,7 @@ import (
 	"gcp_go_cloud_run/app/dto"
 	"gcp_go_cloud_run/app/usecase"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,4 +41,48 @@ func (ctrl *BellController) CreateBell(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, createdBell)
+}
+
+func (ctrl *BellController) CallBell(c *gin.Context) {
+	bellID := c.Param("bellId")
+	if bellID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid bell ID"})
+		return
+	}
+
+	bellIDtoInt, err := strconv.Atoi(bellID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid bell ID"})
+		return
+	}
+
+	err = ctrl.BellService.CallBell(bellIDtoInt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to call bell"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Bell called successfully"})
+}
+
+func (ctrl *BellController) CompleteCall(c *gin.Context) {
+	bellID := c.Param("bellId")
+	if bellID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid bell ID"})
+		return
+	}
+
+	bellIDtoInt, err := strconv.Atoi(bellID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid bell ID"})
+		return
+	}
+
+	err = ctrl.BellService.CompleteCall(bellIDtoInt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to complete call"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Call completed successfully"})
 }
