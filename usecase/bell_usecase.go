@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"fmt"
 	"gcp_go_cloud_run/app/domain/repository"
 	"gcp_go_cloud_run/app/dto"
 	"gcp_go_cloud_run/app/mapper"
@@ -82,23 +83,25 @@ func (s *BellService) DeleteBell(id int) error {
 */
 
 func (s *BellService) CallBell(bellID int) error {
-	print("%d", bellID)
+	fmt.Printf("%d", bellID)
 	//bellIDからstoreIDを取得
 	storeID, err := s.BellRepository.GetStoreIDByBellID(bellID)
 	if err != nil {
-		print("storeIDの取得に失敗しました")
+		fmt.Printf("error:%s", err)
 		return err
 	}
 
 	//call_logに新しいレコードを追加
 	err = s.CallLogRepository.Create(storeID, bellID)
 	if err != nil {
+		fmt.Printf("error:%s", err)
 		return err
 	}
 
 	//bellのstatusをcallingに更新
 	err = s.BellRepository.UpdateStatus(bellID, "calling")
 	if err != nil {
+		fmt.Printf("error:%s", err)
 		return err
 	}
 
