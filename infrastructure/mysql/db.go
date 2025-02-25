@@ -39,6 +39,9 @@ func InitDB() {
 	}
 
 	DB.AutoMigrate(&entity.Bell{}, &entity.Store{}, &entity.CallLog{})
+
+	// Seed data
+	Seed()
 }
 
 func Seed() {
