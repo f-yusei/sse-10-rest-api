@@ -41,6 +41,13 @@ func InitDB() {
 	DB.AutoMigrate(&entity.Bell{}, &entity.Store{}, &entity.CallLog{})
 }
 
+func Seed() {
+	// Seed data
+	bell := entity.Bell{ID: 1, StoreID: 0, DeviceID: "device_id_1", Status: "active"}
+	store := entity.Store{Name: "たこ焼き", Bells: []entity.Bell{bell}}
+	DB.Create(&store)
+}
+
 func GetEnv(key string, defaultValue string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {

@@ -25,6 +25,9 @@ func main() {
 
 	infrastructure.InitDB()
 
+	//シード
+	infrastructure.Seed()
+
 	// リポジトリの初期化
 	storeRepo := mysql.NewStoreRepository(infrastructure.DB)
 	bellRepo := mysql.NewBellRepository(infrastructure.DB)
