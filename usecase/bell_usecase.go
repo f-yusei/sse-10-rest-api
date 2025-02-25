@@ -83,7 +83,7 @@ func (s *BellService) DeleteBell(id int) error {
 */
 
 func (s *BellService) CallBell(bellID int) error {
-	fmt.Printf("%d", bellID)
+	fmt.Printf("bellId is %d", bellID)
 	//bellIDからstoreIDを取得
 	storeID, err := s.BellRepository.GetStoreIDByBellID(bellID)
 	if err != nil {
